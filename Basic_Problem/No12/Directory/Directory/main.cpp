@@ -20,6 +20,7 @@ extern void cmd_cp(char srcPath[PATH_MAXLEN + 1], char dstPath[PATH_MAXLEN + 1])
 extern void cmd_mv(char srcPath[PATH_MAXLEN + 1], char dstPath[PATH_MAXLEN + 1]);
 extern int cmd_find(char path[PATH_MAXLEN + 1]);
 
+
 static bool run(int m) {
 
 	bool isAccepted = true;
