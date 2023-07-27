@@ -44,22 +44,34 @@
 
 
 */
+
 #include <iostream>
 #include <vector>
 #include <queue>
 using namespace std;
+#define MAX_N 300
 
+int clickZero;
+
+void viewGrid(int N, vector<vector<int>>& grid){
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            cout<<grid[i][j] << " ";
+        }
+        cout<<endl;
+    }
+}
 const int dx[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-int bfs(int x, int y, int N, vector<vector<char>>& grid) {
-    vector<vector<bool>> visited(N, vector<bool>(N, false));
-    queue<pair<int, int>> q;
-    int clicks = 0;
+vector<vector<bool>> visited(MAX_N, vector<bool>(MAX_N, false));
 
+void makeZero(int x, int y, int N, vector<vector<char>>& grid){
+    queue<pair<int, int>> q;
+    bool firstCheck = true;
     q.push({x, y});
     visited[x][y] = true;
-
+    int isZero=0;
     while (!q.empty()) {
         int size = q.size();
         for (int i = 0; i < size; i++) {
@@ -68,7 +80,7 @@ int bfs(int x, int y, int N, vector<vector<char>>& grid) {
             q.pop();
 
             if (grid[cx][cy] == '*') continue;
-
+            
             int mine_count = 0;
             for (int j = 0; j < 8; j++) {
                 int nx = cx + dx[j];
@@ -77,6 +89,11 @@ int bfs(int x, int y, int N, vector<vector<char>>& grid) {
                     mine_count++;
                 }
             }
+
+            if (firstCheck && mine_count > 0) continue;
+            firstCheck = false;
+            
+
 
             if (mine_count == 0) {
                 for (int j = 0; j < 8; j++) {
@@ -89,14 +106,14 @@ int bfs(int x, int y, int N, vector<vector<char>>& grid) {
                 }
             }
             grid[cx][cy] = static_cast<char>(mine_count+'0');
-            
+            if(grid[cx][cy]=='0') isZero++;
 
         }
-        clicks++;
     }
+    if(isZero) clickZero++;
 
-    return clicks;
 }
+
 
 int main() {
     int T;
@@ -107,23 +124,38 @@ int main() {
         cin >> N;
         vector<vector<char>> grid(N, vector<char>(N));
 
+        int totalClick = 0;
+        
+        // make grid
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 cin >> grid[i][j];
+                visited[i][j]=false;
             }
         }
 
-        int min_clicks = 99999;
+        clickZero=0;
+        //make zero and count
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (grid[i][j] == '.') {
-                    int clicks = bfs(i, j, N, grid);
-                    min_clicks = min(min_clicks, clicks);
+                    makeZero(i, j, N, grid);
+                    if(grid[i][j]=='.') visited[i][j]=false;
                 }
             }
         }
 
-        cout << "#" << tc << " " << min_clicks << endl;
+        totalClick+=clickZero;
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (grid[i][j] == '.') {
+                    totalClick++;
+                }
+            }
+        }
+
+        cout << "#" << tc << " " << totalClick << endl;
     }
 
     return 0;

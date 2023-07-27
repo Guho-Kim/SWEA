@@ -5,6 +5,10 @@
         "xstring": "cpp",
         "stack": "cpp",
         "iosfwd": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "vector": "cpp",
+        "utility": "cpp",
+        "algorithm": "cpp",
+        "queue": "cpp"
     }
 }
