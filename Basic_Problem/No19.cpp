@@ -1,42 +1,46 @@
 /*
-
-    힙 강의 듣고 다시 풀어보기
-    
+    4006. [Professional] 고속도로 건설 2
 */
 
 #include <iostream>
-#include <vector>
 #include <queue>
-#include <cmath>
 #define MAX_N 50000
 
-
-
 using namespace std;
-
-struct Edge{
-    int u, v;
-    long cost;
+struct Node{
+    int u, v, cost;
 };
-vector<Edge> edges(MAX_N);
+
+struct cmp{
+    bool operator()(const Node& n1, const Node& n2){
+        return n1.cost > n2.cost;
+    }
+};
+
+priority_queue<Node, vector<Node>, cmp> pq;
 
 int parent[MAX_N+1];
 
-bool compareEdges(const Edge& e1, const Edge& e2){
-    return e1.cost < e2.cost;
+void init(int N){
+    for(int i=1; i<=N; i++){
+        parent[i]=i;
+    }
 }
 
-int findParent(int u){
-    if(parent[u]==u) return u;
-    return parent[u] = findParent(parent[u]);
+
+int findParent(int node) {
+    if (parent[node] == node)
+        return node;
+    return parent[node] = findParent(parent[node]);
 }
 
-void unionIsland(int u, int v){
-    u = findParent(u);
-    v = findParent(v);
-    if (u != v) parent[v] = u;
-
+void unionNodes(int a, int b) {
+    a = findParent(a);
+    b = findParent(b);
+    if (a != b)
+        parent[b] = a;
 }
+
 
 int main(int argc, char **argv)
 {
@@ -46,38 +50,23 @@ int main(int argc, char **argv)
     for (test_case = 1; test_case <= T; ++test_case)
     {
         int N, M;
+        int s, e, c;
         int totalCost=0;
-        //vector<Edge> edges;
-
-        
         cin >> N;
+        init(N);
+
         cin >> M;
-        priority_queue<Edge> edges;
-
         for(int i=0; i<M; i++){
-            edges
+            cin >> s >> e >> c;
+            pq.push({s,e,c});
         }
 
-
-        /*
-        edges.clear();
-        for(int i=0; i<M; i++){
-            int u, v, c;
-            cin >> u >> v >> c;
-            edges.push_back({u, v, c});
-        }
-
-        // 오름차순으로 정렬
-        sort(edges.begin(), edges.end(), compareEdges);
-        */
-        for (int i = 1; i <= N; i++) {
-            parent[i] = i;
-        }
-
-        for(const auto edge : edges){
-            if(findParent(edge.u) != findParent(edge.v)){
-                unionIsland(edge.u, edge.v);
-                totalCost += edge.cost;
+        while(!pq.empty()){
+            Node node = pq.top();
+            pq.pop();
+            if(findParent(node.u) != findParent(node.v)){
+                unionNodes(node.u, node.v);
+                totalCost+= node.cost;
             }
         }
 
