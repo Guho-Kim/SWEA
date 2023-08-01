@@ -1,6 +1,5 @@
-/*
-No. 17 영준이의 진짜 BFS
-*/
+// [SWEA] No 1855. 영준이의 진짜 BFS
+
 
 #include <iostream>
 #include <vector>

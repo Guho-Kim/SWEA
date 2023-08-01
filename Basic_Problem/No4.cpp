@@ -1,3 +1,5 @@
+// [SWEA] No 1230. [S/W 문제해결 기본] 8일차 - 암호문3
+
 #include<iostream>
 #include<iterator>
 #include<list>

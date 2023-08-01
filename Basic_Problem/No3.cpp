@@ -1,3 +1,5 @@
+// [SWEA] No 3316. 동아리실 관리하기
+
 #include <iostream>
 #include <cstring>
 using namespace std;

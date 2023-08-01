@@ -1,3 +1,4 @@
+// [SWEA] No 1249. [S/W 문제해결 응용] 4일차 - 보급로
 
 #include<iostream>
 #include<algorithm>

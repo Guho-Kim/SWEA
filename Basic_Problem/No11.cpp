@@ -1,3 +1,4 @@
+// [SWEA] No 1248. [S/W 문제해결 응용] 3일차 - 공통조상
 #include<iostream>
 #include<unordered_set>
 #include<cmath>

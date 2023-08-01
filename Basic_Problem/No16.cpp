@@ -1,6 +1,5 @@
-/*
-    No. 16 파핑파핑 지뢰찾기
-*/
+// [SWEA] No 1868. 파핑파핑 지뢰찾기
+
 
 #include <iostream>
 #include <vector>

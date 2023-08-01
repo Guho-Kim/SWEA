@@ -1,3 +1,4 @@
+// [SWEA] No 13501. 수열 편집
 #include<iostream>
 #include<iterator>
 #include<list>

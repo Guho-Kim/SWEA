@@ -1,6 +1,5 @@
-/*
-    4006. [Professional] 고속도로 건설 2
-*/
+// [SWEA] No 4006. [Professional] 고속도로 건설 2
+
 
 #include <iostream>
 #include <queue>

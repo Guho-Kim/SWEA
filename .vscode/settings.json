@@ -12,6 +12,9 @@
         "queue": "cpp",
         "xiosbase": "cpp",
         "climits": "cpp",
-        "xstddef": "cpp"
+        "xstddef": "cpp",
+        "list": "cpp",
+        "sstream": "cpp",
+        "cstdio": "cpp"
     }
 }

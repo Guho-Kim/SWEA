@@ -1,3 +1,4 @@
+// [SWEA] No 9429. Directory
 #include<iostream>
 #include<cstdio>
 int mstrcmp(const char *a, const char *b)

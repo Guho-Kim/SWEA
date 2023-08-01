@@ -1,6 +1,5 @@
-/*
-    No. 25 중간값 구하기
-*/
+// [SWEA] No 3000. 중간값 구하기
+
 #include<iostream>
 #include<queue>
 using namespace std;

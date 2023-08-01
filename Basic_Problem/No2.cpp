@@ -1,3 +1,5 @@
+// [SWEA] No10726. 이진수 표현
+
 #include<iostream>
 
 using namespace std;

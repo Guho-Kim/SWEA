@@ -1,7 +1,5 @@
-/*
-    No. 21 0/1 Knapsack
+// [SWEA] No 3282. 0/1 Knapsack
 
-*/
 
 #include<iostream>
 #include<algorithm>

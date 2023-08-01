@@ -1,6 +1,4 @@
-/*
-    3304. 최장 공통 부분 수열
-*/
+// [SWEA] No 3304. 최장 공통 부분 수열
 
 #include <iostream>
 #include <vector>

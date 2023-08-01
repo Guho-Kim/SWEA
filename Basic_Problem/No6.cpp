@@ -1,3 +1,4 @@
+// [SWEA] No 12303. 기초 Single Linked List 연습
 #define MAX_NODE 10000
 
 struct Node {
