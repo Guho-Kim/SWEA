@@ -11,6 +11,7 @@
         "algorithm": "cpp",
         "queue": "cpp",
         "xiosbase": "cpp",
-        "climits": "cpp"
+        "climits": "cpp",
+        "xstddef": "cpp"
     }
 }
