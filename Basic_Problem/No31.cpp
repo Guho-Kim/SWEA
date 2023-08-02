@@ -2,7 +2,7 @@
 #include<iostream>
 #include<vector>
 #define MAXN 2010
-#define DIV ((1<<25)-(1))
+#define DIV ((1<<30)-(1))
 using namespace std;
 
 
@@ -14,17 +14,17 @@ int Trans[MAXN][MAXN];
 
 int H, W, N, M; 
 
-int getHash(int *ptr, int n){
-    int hash = 5381;
+int getHash(int *ptr, int n, int shift){
+    unsigned long long hash = 5381;
     for(int i=0; i<n; i++)
-        hash=(hash<<5)+hash+ptr[i];
-    return hash;
+        hash=(hash<<shift)+hash+ptr[i];
+    return (int) hash&DIV;
 }
 int getMul(int *ptr, int n){
-    int hash = 5381;
+    unsigned long long hash = 5381;
     for(int i=0; i<n; i++)
         hash=(hash<<5)+hash+ptr[i];
-    return hash;
+    return (int) hash&DIV;
 }
 
 
@@ -38,18 +38,18 @@ int solve(){
     // make target hash value
     int targetHash=0;
     for(int i=0; i<H; i++) {
-        Trans[0][i] = getHash(myPic[i], W);
+        Trans[0][i] = getHash(myPic[i], W, 5);
     }
-    targetHash = getHash(&Trans[0][0], H);
+    targetHash = getHash(&Trans[0][0], H, 4);
 
     for(int i=0; i<N; i++){
         for(int j=0; j<M-W+1; j++){
-            Trans[j][i]=getHash(&tPic[i][j], W);
+            Trans[j][i]=getHash(&tPic[i][j], W, 5);
         }
     }
     for(int i=0; i<N-H+1; i++){
         for(int j=0; j<M-W+1; j++){
-            hashTable[i][j]=getHash(&Trans[j][i], H);
+            hashTable[i][j]=getHash(&Trans[j][i], H, 4);
         }
     }
 
