@@ -18,7 +18,6 @@ int CalcMul(int num, int shift) {
     for(int i = 1; i < num; i++) hash = (hash << shift) + hash;
     return (int) (hash & DIV);
 }
-
 /*
     info_getNextHash
     prevHash = 33^5*a + 33^4*b + 33^3*c + 33^2+d + 33^1*e + f
@@ -33,8 +32,7 @@ int getNextHash(int prevHash, int subHash, int mul, int addHash, int shift) {
 
 int solve(){
     cin>>H>>W>>N>>M;
-    int rowShift = 5, colShift = 4;
-    int rowMul = CalcMul(W, rowShift), colMul = CalcMul(H, colShift);
+    int rowShift = 5, colShift = 4, rowMul = CalcMul(W, rowShift), colMul = CalcMul(H, colShift);
     for(int i=0; i<H; i++){for(int j=0; j<W; j++){char c; cin>>c; myPic[i][j]=c;}}
     for(int i=0; i<N; i++){for(int j=0; j<M; j++){char c; cin>>c; tPic[i][j]=c;}}
     
