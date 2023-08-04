@@ -144,7 +144,8 @@ static int run(int answer)
 				}
 				ret = deleteMail(param1, str);
 				if (ret != param2) {
-					printf("delete error\n");
+					printf("delete error1\n");
+					printf("ret=%d, param2=%d\n",ret, param2);
 					answer = 0;
 				}
 			}
@@ -152,7 +153,7 @@ static int run(int answer)
 				scanf("%d %d %d", &param1, &seed, &param2);
 				ret = delete_mail(param1, seed);
 				if (ret != param2) {
-					printf("delete error\n");
+					printf("delete error2\n");
 					answer = 0;
 				}
 			}
