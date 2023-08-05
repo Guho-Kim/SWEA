@@ -25,6 +25,7 @@ void solve(){
             right=mid-1;
         }
         else{
+            // 찾았을 때도 계속 오른쪽으로 이동해서 최댓값 찾기
             maxBags = mid;
             left=mid+1;
         }
