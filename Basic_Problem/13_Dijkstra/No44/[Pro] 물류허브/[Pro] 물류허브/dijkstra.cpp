@@ -1,11 +1,12 @@
 /*
+
 #include<iostream>
 #include<vector>
 #include<queue>
 #include<unordered_map>
 using namespace std;
 typedef unsigned long long ull;
-#define MAX_N 1410
+#define MAX_N 701
 #define INF 1000000000
 
 int arr[MAX_N][MAX_N];
@@ -35,6 +36,7 @@ void dijkstra(int start) {
             }
         }
     }
+
 }
 int init(int N, int sCity[], int eCity[], int mCost[]) {
     cnt = 1;
@@ -47,21 +49,23 @@ int init(int N, int sCity[], int eCity[], int mCost[]) {
 
     for (int i = 1; i <= cnt; i++) for (int j = 1; j <= cnt; j++) arr[i][j] = INF;
     for (int i = 0; i < N; i++) arr[hashMap[sCity[i]]][hashMap[eCity[i]]] = mCost[i];
-
+    for (int i = 1; i <= cnt; i++) dijkstra(i);
     return cnt;
 }
 
 void add(int sCity, int eCity, int mCost) {
     arr[hashMap[sCity]][hashMap[eCity]] = mCost;
+    for (int i = 1; i <= cnt; i++) dijkstra(i);
 	return;
 }
 void view() {for (int i = 1; i <= cnt; i++) {for (int j = 1; j <= cnt; j++) {cout << dist[i][j] << " ";}cout << "\n";}}
 
 int cost(int mHub) {
-    for (int i = 1; i <= cnt; i++) dijkstra(i);
+    
     int sum = 0;
     for (int i = 1; i <= cnt; i++) sum += dist[hashMap[mHub]][i] + dist[i][hashMap[mHub]];
 
 	return sum;
 }
+
 */

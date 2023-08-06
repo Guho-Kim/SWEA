@@ -24,5 +24,8 @@
     <ClCompile Include="floydWarshall.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="dijkstra_array.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

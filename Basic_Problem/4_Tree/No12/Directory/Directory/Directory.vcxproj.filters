@@ -18,7 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="userCode.cpp">
+    <ClCompile Include="vector.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Array.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
