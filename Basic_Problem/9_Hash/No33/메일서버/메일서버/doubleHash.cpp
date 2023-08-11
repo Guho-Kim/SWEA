@@ -9,10 +9,8 @@ using namespace std;
 #define MAXID 1010
 #define MAXMAIL 30010
 list<int> mailbox[MAXID];
-string subject_list[MAXMAIL]; // 주제 리스트를 벡터로 저장
-
-unordered_multimap<string, int> subject_to_id; // 주제와 ID를 매핑하는 해시맵
-// 같은 이름의 string에 대해서 id가 하나밖에 저장 안 되는 문제 발생. 여러개 저장되게 할 거면 의미 없음.
+string subject_list[MAXMAIL];
+unordered_multimap<string, int> subject_to_id;
 
 int max_box;
 int subjectCnt;
@@ -78,4 +76,5 @@ int searchMail(int uID, char text[]) {
     }
     return cnt;
 }
+
 */

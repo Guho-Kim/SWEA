@@ -1,5 +1,4 @@
 /*
-
 #include<iostream>
 #include<string>
 #include<cstring>
@@ -13,6 +12,7 @@ using namespace std;
 
 struct Node {
 	string name;
+	Node* parent;
 	Node* child[MAX_CHILD];
 };
 
@@ -21,12 +21,11 @@ int nodeCnt;
 
 Node* getNode(string name);
 Node* findNode(string path);
-void clearChild(Node* node);
 
-Node* root = getNode("/");
+
+Node* root;
 void init(int n) {
 	nodeCnt = 0;
-	clearChild(root);
 	root = getNode("/");
 }
 
@@ -34,48 +33,36 @@ void init(int n) {
 void cmd_mkdir(char path[PATH_MAXLEN + 1], char name[NAME_MAXLEN + 1]) {
 	Node* node = findNode(path);
 	Node* newNode = getNode(name);
-	
-	for (int i = 0; i < MAX_CHILD; i++) { // 배열 초기화
+	newNode->parent = node;
+	for (int i = 0; i < MAX_CHILD; i++) {
 		if (node->child[i] == nullptr) {
 			node->child[i] = newNode;
 			break;
 		}
 	}
-	
 }
 
 void cmd_rm(char path[PATH_MAXLEN + 1]) {
-	string pathStr(path);
-	int idx = 0;
-	for (int i = pathStr.size() - 2; i >= 0; i--) {
-		if (pathStr[i] == '/') {
-			idx = i;
-			break;
-		}
-	}
-	string ppath = pathStr.substr(0, idx + 1);
-
-	Node* parent = findNode(ppath);
 	Node* node = findNode(path);
-	for (int i = 0; i < MAX_CHILD; i++) { // 배열에서 해당 노드 검색 후 삭제
+	Node* parent = node->parent;
+	for (int i = 0; i < MAX_CHILD; i++) {
 		if (parent->child[i] == node) {
-			parent->child[i] = nullptr; // 해당 위치의 노드를 삭제
+			parent->child[i] = nullptr;
 			break;
 		}
 	}
-	
 }
 
 void recursiveCopy(Node* src, Node* dest) {
 	Node* newNode = getNode(src->name);
-	for (int i = 0; i < MAX_CHILD; i++) { // 배열 초기화
+	newNode->parent = dest;
+	for (int i = 0; i < MAX_CHILD; i++) {
 		if (dest->child[i] == nullptr) {
 			dest->child[i] = newNode;
 			break;
 		}
 	}
-
-	for (int i = 0; i < MAX_CHILD; i++) { // 자식 노드 재귀적으로 복사
+	for (int i = 0; i < MAX_CHILD; i++) {
 		if (src->child[i] != nullptr) {
 			recursiveCopy(src->child[i], newNode);
 		}
@@ -85,44 +72,31 @@ void recursiveCopy(Node* src, Node* dest) {
 void cmd_cp(char srcPath[PATH_MAXLEN + 1], char dstPath[PATH_MAXLEN + 1]) {
 	Node* src = findNode(srcPath);
 	Node* dest = findNode(dstPath);
-
 	recursiveCopy(src, dest);
-	
 }
 
 void cmd_mv(char srcPath[PATH_MAXLEN + 1], char dstPath[PATH_MAXLEN + 1]) {
 	Node* node = findNode(srcPath);
-	string pathStr(srcPath);
-	int idx = 0;
-	for (int i = pathStr.size() - 2; i >= 0; i--) {
-		if (pathStr[i] == '/') {
-			idx = i;
-			break;
-		}
-	}
-	string ppath = pathStr.substr(0, idx + 1);
-	Node* parent = findNode(ppath);
-
-	for (int i = 0; i < MAX_CHILD; i++) { // 배열에서 해당 노드 검색 후 삭제
+	Node* parent = node->parent;
+	for (int i = 0; i < MAX_CHILD; i++) {
 		if (parent->child[i] == node) {
-			parent->child[i] = nullptr; // 해당 위치의 노드를 삭제
+			parent->child[i] = nullptr;
 			break;
 		}
 	}
-
 	Node* dstNode = findNode(dstPath);
-	for (int i = 0; i < MAX_CHILD; i++) { // 배열에 노드 추가
+	node->parent = dstNode;
+	for (int i = 0; i < MAX_CHILD; i++) {
 		if (dstNode->child[i] == nullptr) {
 			dstNode->child[i] = node;
 			break;
 		}
 	}
-	
 }
 
 int recursiveCount(Node* node) {
 	int count = 0;
-	for (int i = 0; i < MAX_CHILD; i++) { // 자식 노드 개수 재귀적으로 계산
+	for (int i = 0; i < MAX_CHILD; i++) {
 		if (node->child[i] != nullptr) {
 			count += 1 + recursiveCount(node->child[i]);
 		}
@@ -147,7 +121,6 @@ Node* getNode(string name) {
 Node* findNode(string path) {
 	vector<string> vec;
 	if (path.size() == 1) return root;
-
 	Node* node = root;
 	string dir = "";
 	for (int i = 1; i < path.size(); i++) {
@@ -160,7 +133,7 @@ Node* findNode(string path) {
 	}
 
 	for (int i = 0; i < vec.size(); i++) {
-		for (int j = 0; j < MAX_CHILD; j++) { // 배열에서 해당 노드 검색
+		for (int j = 0; j < MAX_CHILD; j++) {
 			if (node->child[j] != nullptr && vec[i] == node->child[j]->name) {
 				node = node->child[j];
 				break;
@@ -168,15 +141,6 @@ Node* findNode(string path) {
 		}
 	}
 	return node;
-}
-
-void clearChild(Node* node) {
-	for (int i = 0; i < MAX_CHILD; i++) { // 자식 노드 모두 삭제
-		if (node->child[i] != nullptr) {
-			clearChild(node->child[i]);
-			node->child[i] = nullptr;
-		}
-	}
 }
 
 */

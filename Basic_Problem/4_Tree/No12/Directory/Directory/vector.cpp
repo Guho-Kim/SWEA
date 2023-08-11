@@ -1,3 +1,4 @@
+/*
 #include<string>
 #include<iostream>
 #include<cstring>
@@ -158,3 +159,4 @@ void view(Node* node, int depth = 0) {
 		view(child, depth + 1);
 	}
 }
+*/

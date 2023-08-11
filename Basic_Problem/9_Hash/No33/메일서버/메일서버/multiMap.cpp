@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <unordered_map>
 #include <string>
@@ -84,3 +85,4 @@ int searchMail(int uID, char text[]) {
     }
     return cnt;
 }
+*/
