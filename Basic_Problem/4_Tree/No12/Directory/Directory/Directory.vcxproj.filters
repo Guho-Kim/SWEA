@@ -18,13 +18,16 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="vector.cpp">
+    <ClCompile Include="Hash%28Solved%29.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Array.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="hash.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="sorceCode.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -130,7 +130,8 @@
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="hash.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="vector.cpp" />
+    <ClCompile Include="sorceCode.cpp" />
+    <ClCompile Include="Hash%28Solved%29.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

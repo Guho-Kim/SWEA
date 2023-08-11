@@ -1,3 +1,4 @@
+/*
 #include<iostream>
 #include<string>
 #include<cstring>
@@ -5,9 +6,9 @@
 #include<unordered_map>
 using namespace std;
 #define NAME_MAXLEN 6
-#define PATH_MAXLEN 1999
-#define MAX_DIR 100000
-#define MAX_CHILD 50
+#define PATH_MAXLEN 2000
+#define MAX_DIR 50000
+#define MAX_CHILD 30
 
 struct Node {
 	string name;
@@ -160,3 +161,4 @@ int cmd_find(char path[PATH_MAXLEN + 1]) {
 
 
 
+*/
