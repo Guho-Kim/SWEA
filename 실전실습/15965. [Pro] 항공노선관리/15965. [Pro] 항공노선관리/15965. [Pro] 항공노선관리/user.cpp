@@ -1,90 +1,127 @@
 #include<unordered_map>
 #include<vector>
-#include<list>
 #include<queue>
-#include<stack>
-#include<array>
-#define INT_MAX 1000000000
+#define INT_MAX 2000000000
 #define MAX_N 60
 using namespace std;
-//unordered_map<int, int> ;
+using tiii = tuple<int, int, int>;
+using pii = pair<int, int>;
+
 int _N;
-//int graph_time[60][60];
-int graph_price[60][60];
-struct Path {
-	int endAirport;
-	int startTime;
-	int travelTime;
-};
-vector<Path> graph_time[60];
+int graph_price[MAX_N][MAX_N];
+int dist_price[MAX_N];		// dist[cur_node] : mStart부터 cur_node까지 최소 비용
+vector<vector<tiii>> graph_time;
+pii dist_time[MAX_N];
 
-
-
-struct Path {
-	int endAirport;
-	int startTime;
-	int travelTime;
-	int mPrice;
-};
-struct Airport {
-	int startAirport;
-	int endAirport;
-	list<Path> next;
-}Airport[60];
+bool visited[MAX_N];
 
 void init(int N)
 {
 	_N = N;
-	//AirPort.clear();
+	graph_time.clear();
+	graph_time.assign(N, vector<tiii>());
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			graph_price[i][j] = INT_MAX;
+		}
+		dist_price[i] = INT_MAX;
+		dist_time[i] = {INT_MAX,INT_MAX};
+	}
 }
 
 void add(int mStartAirport, int mEndAirport, int mStartTime, int mTravelTime, int mPrice)
 {
-	//Airport[mStartAirport].next.push_back({mEndAirport, mStartTime, mTravelTime, mPrice });
-	graph_time[mStartAirport].push_back({ mEndAirport, mStartAirport, mTravelTime });
-	
+	graph_time[mStartAirport].push_back({mEndAirport, mStartTime, mTravelTime});
 	if(graph_price[mStartAirport][mEndAirport]>mPrice)
 		graph_price[mStartAirport][mEndAirport] = mPrice;
 }
 
 int minTravelTime(int mStartAirport, int mEndAirport, int mStartTime)
 {
-	priority_queue<array<int, 3>, vector<array<int, 3>>, greater<>> pq;
-	pq.push({0, mStartTime, mStartAirport });
-	int dist[MAX_N];
-	for (int i = 0; i < _N; i++) dist[i] = INT_MAX;
-	//dist[mStartAirport]=
+	priority_queue<tiii, vector<tiii>, greater<>> pq;
+	pq.push({0, mStartTime, mStartAirport });	// {date, time, node}
+	for (int i = 0; i < _N; i++) {
+		dist_time[i] = { INT_MAX,INT_MAX };
+		visited[i] = false;
+	}
+	dist_time[mStartAirport] = {0, mStartTime};
 
-	return 0;
+	while (!pq.empty()) {
+		auto cur = pq.top();
+		int cur_date = get<0>(cur);
+		int cur_start_time = get<1>(cur);
+		int cur_node = get<2>(cur);
+
+
+		pq.pop();
+		if (visited[cur_node]) {
+			continue;
+		}
+		visited[cur_node] = true;
+		if (cur_node == mEndAirport) {
+			while (!pq.empty()) {
+				pq.pop();
+			}
+			return cur_date * 24 + cur_start_time - mStartTime;
+		}
+
+
+		for (auto next : graph_time[cur_node]) {
+			int next_date = cur_date;
+			int next_start_time = get<1>(next);
+			if (cur_start_time > next_start_time) {
+				next_date++;
+			}
+			int next_time = next_start_time + get<2>(next);
+			if (next_time >= 24) {
+				next_time -= 24;
+				next_date++;
+			}
+			int next_node = get<0>(next);
+			if ((next_date == dist_time[next_node].first && next_time < dist_time[next_node].second)
+				|| next_date < dist_time[next_node].first) {
+				dist_time[next_node] = { next_date, next_time };
+				pq.push({ next_date, next_time, next_node });
+			}
+		}
+	}
+	return -1;
 }
 
 int minPrice(int mStartAirport, int mEndAirport)
 {
-	priority_queue<array<int, 2>, vector<array<int, 2>>, greater<>> pq;
-	pq.push({ 0, mStartAirport });
-	int dist[60];
-	for (int i = 0; i < _N; i++) dist[i] = INT_MAX;
+	priority_queue<pii, vector<pii>, greater<>> pq;
+	pq.push({ 0, mStartAirport });		// {dist_price, dest_node}
 
-	dist[mStartAirport] = 0;
+	for (int i = 0; i < _N; i++) {
+		dist_price[i] = INT_MAX;
+		visited[i] = false;
+	}
+
+	dist_price[mStartAirport] = 0;
 	while (!pq.empty()) {
-		auto cur = pq.top();
+		int cur_price = pq.top().first;
+		int cur_node = pq.top().second;
 		pq.pop();
-		if (cur[0] != dist[cur[1]]) {
+		if (visited[cur_node]) {
 			continue;
 		}
-		if (cur[1] == mEndAirport) {
+		visited[cur_node] = true;
+
+		if (cur_node == mEndAirport) {
 			while (!pq.empty()) {
 				pq.pop();
 			}
-			return cur[0];
+			return cur_price;
 		}
 		for (int i = 0; i < _N; i++) {
-			if (graph_price[cur[1]][i] == INT_MAX) {
+			if (graph_price[cur_node][i] == INT_MAX) {
 				continue;
 			}
-			if (cur[0] + graph_price[cur[1]][i] < dist[i]) {
-				dist[i] = cur[0] + graph_price[cur[1]][i];
-				pq.push({ dist[i],i });
+			int next_price = cur_price + graph_price[cur_node][i];
+			if (next_price < dist_price[i]) {
+				dist_price[i] = next_price;
+				pq.push({ dist_price[i],i });
 			}
 		}
 	}

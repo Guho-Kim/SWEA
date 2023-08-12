@@ -49,6 +49,7 @@ static bool run()
 			scanf("%d", &ans);
 			if (userAns != ans)
 			{
+				printf("Travel_time\nMy ans: %d\nAns: %d\n", userAns, ans);
 				isCorrect = false;
 			}
 			break;
@@ -58,6 +59,7 @@ static bool run()
 			scanf("%d", &ans);
 			if (userAns != ans)
 			{
+				printf("Travel_price\nMy ans: %d\nAns: %d\n", userAns, ans);
 				isCorrect = false;
 			}
 			break;

@@ -65,24 +65,30 @@ static int run()
 			scanf("%s %s", mMonarchA, mMonarchB);
 			result = ally(mMonarchA, mMonarchB);
 			scanf("%d", &check);
-			if (result != check)
+			if (result != check) {
+				printf("Ally\nmyAns: %d\nAns: %d\n", result, check);
 				isOK = 0;
+			}
 			break;
 
 		case CMD_ATTACK:
 			scanf("%s %s %s", mMonarchA, mMonarchB, mGeneral);
 			result = attack(mMonarchA, mMonarchB, mGeneral);
 			scanf("%d", &check);
-			if (result != check)
+			if (result != check) {
+				printf("Attack\nmyAns: %d\nAns: %d\n", result, check);
 				isOK = 0;
+			}
 			break;
 
 		case CMD_RECRUIT:
 			scanf("%s %d %d", mMonarchA, &num, &mOption);
 			result = recruit(mMonarchA, num, mOption);
 			scanf("%d", &check);
-			if (result != check)
+			if (result != check) {
+				printf("Recruit\nmyAns: %d\nAns: %d\n", result, check);
 				isOK = 0;
+			}
 			break;
 
 		default:
@@ -99,7 +105,7 @@ static int run()
 int main()
 {
 	setbuf(stdout, NULL);
-	//freopen("sample_input.txt", "r", stdin);
+	freopen("sample_input.txt", "r", stdin);
 
 	int T, MARK;
 	scanf("%d %d", &T, &MARK);
