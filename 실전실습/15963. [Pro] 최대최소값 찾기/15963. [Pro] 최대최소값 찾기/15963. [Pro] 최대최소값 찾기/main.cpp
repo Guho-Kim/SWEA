@@ -61,8 +61,10 @@ static bool run()
             ret = find(K);
             scanf("%d", &ans);
 
-            if (ans != ret)
+            if (ans != ret) {
+                printf("My Ans: %d\nAns: %d\n", ret, ans);
                 ok = false;
+            }
         }
     }
     return ok;
@@ -71,7 +73,7 @@ static bool run()
 int main()
 {
     setbuf(stdout, NULL);
-    freopen("sample_input.txt", "r", stdin);
+    //freopen("sample_input.txt", "r", stdin);
     int T, MARK;
     scanf("%d %d", &T, &MARK);
 
