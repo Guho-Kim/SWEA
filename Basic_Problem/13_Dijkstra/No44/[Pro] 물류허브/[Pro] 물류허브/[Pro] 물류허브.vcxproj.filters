@@ -18,14 +18,17 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="dijkstra.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="floydWarshall.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="dijkstra_array.cpp">
+    <ClCompile Include="dijkstra_pq.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="sorceCode.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="sample_input.txt" />
   </ItemGroup>
 </Project>

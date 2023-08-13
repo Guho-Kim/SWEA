@@ -1,85 +1,74 @@
 #include <unordered_map>
 #include <list>
 #include <queue>
-#include <vector>
-#include <functional>
-#include <algorithm>
 
 using namespace std;
-
-struct Buy {
-    int mProdcut;
-    int mPrice;
-    int mQuantity;
-    int mRest;
-};
-struct Sell {
-    bool isValid;
-    int mProdcut;
-    list<pair<int, int> >::iterator itBegin, itEnd;
-};
+using pii = pair<int, int>;
+struct Buy {int product, price, quantity, rest;};
+struct Sell {bool isSold; int product; list<pii>::iterator itBegin, itEnd;};
 
 unordered_map<int, Buy> buys;
-unordered_map<int, int> productRest;
+unordered_map<int, int> stock;      // 마켓에 상품 재고
 
-int lastqidx;
-unordered_map<int, int> qidx;
-priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > pq[601];
+int pqCnt;
+unordered_map<int, int> qIndex;
+priority_queue<pii, vector<pii>, greater<> > pq[601];
 
 unordered_map<int, Sell> sells;
-list<pair<int, int> > sellHistory;
+list<pii> sellHistory;
 
 void init() {
     buys.clear();
-    productRest.clear();
-    qidx.clear();
+    stock.clear();
+    qIndex.clear();
     sellHistory.clear();
-    for (int i = 1; i <= lastqidx; i++) {
-        while (!pq[i].empty()) pq[i].pop();
-    }
-    lastqidx = 0;
+    for (int i = 1; i <= pqCnt; i++) while (!pq[i].empty()) pq[i].pop();
+    pqCnt = 0;
 }
 
 int buy(int bId, int mProduct, int mPrice, int mQuantity) {
-    buys[bId] = (Buy){mProduct, mPrice, mQuantity, mQuantity};
+    buys[bId] = { mProduct, mPrice, mQuantity, mQuantity };
 
-    productRest[mProduct] += mQuantity;
-    
-    if (qidx[mProduct] == 0) qidx[mProduct] = ++lastqidx;
-    pq[qidx[mProduct]].push({ mPrice, bId });
-    return productRest[mProduct];
+    // 마켓 재고
+    stock[mProduct] += mQuantity;
+
+    // 마켓 상품에 대한 구매 가격. 싸게 산 것부터 판매 예정
+    if (qIndex[mProduct] == 0) qIndex[mProduct] = ++pqCnt;
+    pq[qIndex[mProduct]].push({ mPrice, bId });
+
+    // 가게가 보유 중인 mProduct 상품의 총 개수를 반환
+    return stock[mProduct];
 }
 
 int cancel(int bId) {
     auto it = buys.find(bId);
-    if (it == buys.end() || it->second.mQuantity != it->second.mRest) {
-        return -1;
-    }
+    if (it == buys.end() || it->second.quantity != it->second.rest) return -1;
 
-    productRest[it->second.mProdcut] -= it->second.mRest;
-    it->second.mRest = 0;
-    return  productRest[it->second.mProdcut];
+    stock[it->second.product] -= it->second.rest;
+    it->second.rest = 0;
+
+    return  stock[it->second.product];
 }
 
 int sell(int sId, int mProduct, int mPrice, int mQuantity) {
-    if (productRest[mProduct] < mQuantity) return -1;
+    if (stock[mProduct] < mQuantity) return -1;
 
-    productRest[mProduct] -= mQuantity;
+    stock[mProduct] -= mQuantity;
 
-    sells[sId].isValid = true;
-    sells[sId].mProdcut = mProduct;
+    sells[sId].isSold = true;
+    sells[sId].product = mProduct;
     sells[sId].itEnd = sellHistory.begin();
 
-    int idx = qidx[mProduct];
+    int qindex = qIndex[mProduct];
     int profit = 0;
     while (mQuantity > 0) {
-        int bId = pq[idx].top().second;
-        int cnt = min(buys[bId].mRest, mQuantity);
-        buys[bId].mRest -= cnt;
+        int bId = pq[qindex].top().second;
+        int cnt = buys[bId].rest < mQuantity ? buys[bId].rest : mQuantity;
+        buys[bId].rest -= cnt;
         mQuantity -= cnt;
-        profit += (mPrice - buys[bId].mPrice) * cnt;
+        profit += (mPrice - buys[bId].price) * cnt;
         sellHistory.push_front({ bId, cnt });
-        if (buys[bId].mRest <= 0) pq[idx].pop();
+        if (buys[bId].rest <= 0) pq[qindex].pop();
     }
     sells[sId].itBegin = sellHistory.begin();
 
@@ -87,20 +76,21 @@ int sell(int sId, int mProduct, int mPrice, int mQuantity) {
 }
 
 int refund(int sId) {
-    if (!sells[sId].isValid) return -1;
+    if (!sells[sId].isSold) return -1;
 
     int cnt = 0;
-    int idx = qidx[sells[sId].mProdcut];
-    sells[sId].isValid = false;
+    int qindex = qIndex[sells[sId].product];
+    sells[sId].isSold = false;
     for (auto it = sells[sId].itBegin; it != sells[sId].itEnd; it++) {
-        if (buys[it->first].mRest == 0) {
-            pq[idx].push({ buys[it->first].mPrice, it->first });
+        int bId = it->first;
+        if (buys[bId].rest == 0) {
+            pq[qindex].push({ buys[bId].price, bId });
         }
-        buys[it->first].mRest += it->second;
+        buys[bId].rest += it->second;
         cnt += it->second;
     }
 
-    productRest[sells[sId].mProdcut] += cnt;
+    stock[sells[sId].product] += cnt;
 
     return cnt;
 }

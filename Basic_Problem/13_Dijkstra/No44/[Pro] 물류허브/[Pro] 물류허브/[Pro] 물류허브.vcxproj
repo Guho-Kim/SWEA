@@ -127,10 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="dijkstra_array.cpp" />
+    <ClCompile Include="dijkstra_pq.cpp" />
     <ClCompile Include="floydWarshall.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="dijkstra.cpp" />
+    <ClCompile Include="sorceCode.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="sample_input.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

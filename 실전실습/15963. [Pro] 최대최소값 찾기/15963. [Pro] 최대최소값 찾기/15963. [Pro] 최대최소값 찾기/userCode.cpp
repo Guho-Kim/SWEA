@@ -1,65 +1,56 @@
-#include<iostream>
 #include<list>
 #define INT_MAX 1000000000
+#define M_MAX 100
+#define BUCKET_MAX 2300
 using namespace std;
 struct Bucket {
 	int max;
 	int min;
 	int size;
-	list<int> List;
+	int List[M_MAX];
 	Bucket* next;
 	Bucket* prev;
-}bucket[3000];
+}bucket[BUCKET_MAX];
 
 int buckCnt;
 Bucket* head;
 Bucket* tail;
 
+void add(int M, int mValue[]) {
+	int j = 0;
+	for (int i = 0; i < M; i++) {
+		if (bucket[buckCnt].size >= M_MAX) {
+			j = 0;
+			buckCnt++;
+			tail->next = &bucket[buckCnt];
+			bucket[buckCnt].prev = tail;
+			bucket[buckCnt].next = nullptr;
+			tail = tail->next;
+		}
+		if (mValue[i] < bucket[buckCnt].min) bucket[buckCnt].min = mValue[i];
+		if (mValue[i] > bucket[buckCnt].max) bucket[buckCnt].max = mValue[i];
+		bucket[buckCnt].List[bucket[buckCnt].size++] = mValue[i];
+	}
+}
+
 void init(int N, int mValue[]) {
+	for (int i = 0; i < BUCKET_MAX; i++) {
+		bucket[i].max = 0;
+		bucket[i].min = INT_MAX;
+		bucket[i].next = nullptr;
+		bucket[i].prev = nullptr;
+		bucket[i].size = 0;
+	}
+
 	buckCnt = 0;
 	head = &bucket[buckCnt];
 	tail = &bucket[buckCnt];
 
-	for (int i = 0; i < 3000; i++) {
-		bucket[i].List.clear();
-		bucket[i].next = nullptr;
-		bucket[i].prev = nullptr;
-	}
-
-	int max = 0;
-	int min = INT_MAX;
-
-	for (int i = 0; i < N; i++) {
-		if (mValue[i] < min) min = mValue[i];
-		if (mValue[i] > max) max = mValue[i];
-		bucket[0].List.push_back(mValue[i]);
-	}
-
-	bucket[buckCnt].max = max;
-	bucket[buckCnt].min = min;
-	bucket[buckCnt].size = N;
-	buckCnt++;
+	add(N, mValue);
 }
 
 
-void add(int M, int mValue[]) {
-	tail->next = &bucket[buckCnt];
-	bucket[buckCnt].prev=tail;
-	bucket[buckCnt].next = nullptr;
-	tail = tail->next;
 
-	int max = 0;
-	int min = INT_MAX;
-	for (int i = 0; i < M; i++) {
-		if (mValue[i] < min) min = mValue[i];
-		if (mValue[i] > max) max = mValue[i];
-		bucket[buckCnt].List.push_back(mValue[i]);
-	}
-	bucket[buckCnt].max = max;
-	bucket[buckCnt].min = min;
-	bucket[buckCnt].size = M;
-	buckCnt++;
-}
 
 void erase(int mFrom, int mTo) {
 	Bucket* node = head;
@@ -87,22 +78,24 @@ void erase(int mFrom, int mTo) {
 
 	//한 버킷에서 모두 끝나는 경우
 	if (startBucket == endBucket) {
-		auto it = startBucket->List.begin();
-		for (int i = 0; i < startIdx; i++) it++;
-		for (int i = 0; i < mTo - mFrom + 1; i++) {
-			it = startBucket->List.erase(it);
-			startBucket->size--;
+		int j = 0;
+		for (int i = endIdx + 1; i < startBucket->size; i++) {
+			startBucket->List[startIdx + j] = startBucket->List[i];;
+			j++;
 		}
+		startBucket->size -= endIdx-startIdx+1;
+
 		int max = 0;
 		int min = INT_MAX;
-		for (auto it = startBucket->List.begin(); it != startBucket->List.end(); it++) {
-			if (max < *it) max = *it;
-			if (min > *it) min = *it;
+		for (int i = 0; i < startBucket->size; i++) {
+			int value = startBucket->List[i];
+			if (max < value) max = value;
+			if (min > value) min = value;
 		}
 		startBucket->max = max;
 		startBucket->min = min;
 
-
+		
 		return;
 	}
 
@@ -113,36 +106,36 @@ void erase(int mFrom, int mTo) {
 	endBucket->prev = startBucket;
 
 	// 각 버킷에서 idx 기준으로 날리기
-	int List_size = startBucket->List.size();
-	for (int i = startIdx; i < List_size; i++) {
-		startBucket->List.pop_back();
-		startBucket->size--;
+	startBucket->size = startIdx;
+
+	int j = 0;
+	for (int i = endIdx+1; i < endBucket->size; i++) {
+		endBucket->List[j] = endBucket->List[i];
+		j++;
 	}
-	
-	for (int i = 0; i <= endIdx; i++) {
-		endBucket->List.pop_front();
-		endBucket->size--;
-	}
+	endBucket->size = j;
 
 	// max, min 갱신
 	int max = 0;
 	int min = INT_MAX;
-	for (auto it = startBucket->List.begin(); it != startBucket->List.end(); it++) {
-		if (max < *it) max = *it;
-		if (min > *it) min = *it;
+	for (int i = 0; i < startBucket->size; i++) {
+		int value = startBucket->List[i];
+		if (max < value) max = value;
+		if (min > value) min = value;
 	}
 	startBucket->max = max;
 	startBucket->min = min;
 	
 	max = 0;
 	min = INT_MAX;
-	for (auto it = endBucket->List.begin(); it != endBucket->List.end(); it++) {
-		if (max < *it) max = *it;
-		if (min > *it) min = *it;
+	for (int i = 0; i < endBucket->size; i++) {
+		int value = endBucket->List[i];
+		if (max < value) max = value;
+		if (min > value) min = value;
 	}
 	endBucket->max = max;
 	endBucket->min = min;
-
+	
 }
 
 
@@ -158,12 +151,12 @@ int find(int K) {
 			cnt -= node->size;
 		}
 		else {
-			auto it = node->List.end();
-			it--;
+			int idx = node->size - 1;
 			for (int i = 0; i < cnt; i++) {
-				if (max < *it) max = *it;
-				if (min > *it) min = *it;
-				it--;
+				int value = node->List[idx];
+				if (max < value) max = value;
+				if (min > value) min = value;
+				idx--;
 			}
 			break;
 		}

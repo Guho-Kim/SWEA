@@ -16,7 +16,7 @@ unordered_map<int, Buy> buys;
 unordered_map<int, int> productRest;	//상품별 남은 수량 <상품 번호, 수량>
 int lastQIndex;
 unordered_map<int, int> qIndex;
-priority_queue < pair<int, int>, vector<pair<int, int>>, greater< pair<int, int>> q[601];
+priority_queue < pair<int, int>, vector<pair<int, int>>, greater<>> q[601];
 
 struct Node {
 	int ID;
@@ -89,4 +89,6 @@ int refund(int sId) {
 	}
 	if (result == 0) return -1;
 	return result;
-}*/
+}
+
+*/
