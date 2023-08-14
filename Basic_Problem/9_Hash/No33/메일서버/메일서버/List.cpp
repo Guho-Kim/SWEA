@@ -2,25 +2,36 @@
 #include <sstream>
 #include <unordered_map>
 #include <list>
-#include <algorithm>
 
 using namespace std;
-#define MAXN 30010
-#define MAX_USER 1002
+#define MAX_USER    1001
+#define MAX_MAIL    10001
+#define MAX_TEXT    10
 
 list<int> mailbox[MAX_USER];
-string IdxToStr[MAXN];
-unordered_map<string, int> StrToIdx;
+unordered_map<string, int> titleHash;
+unordered_map<string, int> textHash;
 
-int subjectCnt;
-int max_box;
+struct Mail {
+    int text[MAX_TEXT];
+    int cnt;
+}mail[MAX_MAIL];
+
+int title_idx;
+int text_idx;
+int _K;
+int _N;
 
 void init(int N, int K) {
-    subjectCnt = 0;
-    max_box = K;
-    for (int i = 0; i < MAX_USER; i++)
+    title_idx = text_idx = 0;
+    _K = K;
+
+    for (int i = 0; i < _N; i++)
         mailbox[i].clear();
-    StrToIdx.clear();
+
+    titleHash.clear();
+    textHash.clear();
+    _N = N;
 }
 
 int getCount(int uID) {
@@ -28,16 +39,19 @@ int getCount(int uID) {
 }
 
 void sendMail(char subject[], int uID, int cnt, int rIDs[]) {
-    int hashValue;
-    if (StrToIdx.find(subject) != StrToIdx.end()) {        // 이미 해시 값이 존재하는 경우
-        hashValue = StrToIdx[subject];
-    }else {
-        hashValue = subjectCnt++;
-        StrToIdx[subject] = hashValue;
-        IdxToStr[hashValue] = subject;
+    if (titleHash[subject] == 0) {
+        int idx = titleHash[subject] = ++title_idx;
+        mail[idx].cnt = 0;
+        string s(subject); istringstream iss(s); string str;
+        while (iss >> str) {
+            if (textHash[str] == 0) textHash[str] = ++text_idx;
+            mail[idx].text[mail[idx].cnt++] = textHash[str];
+        }
     }
+    
+    int hashValue = titleHash[subject];
     for (int i = 0; i < cnt; i++) {
-        if (getCount(rIDs[i]) == max_box) {
+        if (getCount(rIDs[i]) == _K) {
             mailbox[rIDs[i]].pop_front();
         }
         mailbox[rIDs[i]].push_back(hashValue);
@@ -46,7 +60,7 @@ void sendMail(char subject[], int uID, int cnt, int rIDs[]) {
 
 int deleteMail(int uID, char subject[]) {
     int cnt = 0;
-    int target = StrToIdx[subject];
+    int target = titleHash[subject];
 
     if (!mailbox[uID].empty()) {
         auto it = mailbox[uID].begin();
@@ -62,18 +76,18 @@ int deleteMail(int uID, char subject[]) {
     }
     return cnt;
 }
+
 int searchMail(int uID, char text[]) {
     int cnt = 0;
+    int target = textHash[text];
     for (int idx : mailbox[uID]) {
-        string s = IdxToStr[idx];
-        istringstream iss(s);
-        string str;
-        while (iss >> str) {
-            if (str == text) {
+        for (int i = 0; i < mail[idx].cnt; i++) {
+            if (mail[idx].text[i] == target) {
                 ++cnt;
                 break;
             }
         }
     }
     return cnt;
+    
 }

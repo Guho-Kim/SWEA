@@ -36,11 +36,15 @@
     <ClCompile Include="List.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sorce.cpp">
+    <ClCompile Include="sourceCode.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="userCode.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="sample_input.txt" />
+    <Text Include="test.txt" />
   </ItemGroup>
 </Project>

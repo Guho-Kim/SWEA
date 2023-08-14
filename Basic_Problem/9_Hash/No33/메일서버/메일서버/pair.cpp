@@ -9,7 +9,10 @@ using namespace std;
 #define MAX_USER 1001
 #define MAX_HASH ((1<<30)-1)
 
-struct Mail {int cnt; list<int> mailList;};	//mailList는 mail 제목의 해시값
+struct Mail {
+	int cnt; 
+	list<int> mailList;
+};	//mailList는 mail 제목의 해시값
 Mail mailbox[MAX_USER];
 
 int userCnt = 0;

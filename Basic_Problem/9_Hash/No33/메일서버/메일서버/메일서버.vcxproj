@@ -136,12 +136,14 @@
     </ClCompile>
     <ClCompile Include="multiMap.cpp" />
     <ClCompile Include="pair.cpp" />
-    <ClCompile Include="sorce.cpp" />
+    <ClCompile Include="sourceCode.cpp" />
+    <ClCompile Include="userCode.cpp" />
     <ClCompile Include="u_map_and_vector.cpp" />
     <ClCompile Include="u_map_and_set.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="sample_input.txt" />
+    <Text Include="test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
