@@ -1,4 +1,4 @@
-/*
+
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif
@@ -194,4 +194,3 @@ int readfile(int mTime, char branch_name[], char file_name[], char ret[]) {
     
     return strlen(file->data);
 }
-*/

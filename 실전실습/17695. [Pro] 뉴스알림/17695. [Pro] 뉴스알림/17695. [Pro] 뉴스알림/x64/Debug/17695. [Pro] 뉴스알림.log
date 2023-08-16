@@ -1,0 +1,4 @@
+﻿  userCode.cpp
+C:\Users\weeee\Workspace\SW_Expert_Academy\실전실습\17695. [Pro] 뉴스알림\17695. [Pro] 뉴스알림\17695. [Pro] 뉴스알림\userCode.cpp(89,47): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\weeee\Workspace\SW_Expert_Academy\실전실습\17695. [Pro] 뉴스알림\17695. [Pro] 뉴스알림\17695. [Pro] 뉴스알림\userCode.cpp(116,34): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  17695. [Pro] 뉴스알림.vcxproj -> C:\Users\weeee\Workspace\SW_Expert_Academy\실전실습\17695. [Pro] 뉴스알림\17695. [Pro] 뉴스알림\x64\Debug\17695. [Pro] 뉴스알림.exe
