@@ -1,10 +1,20 @@
+/*
 
+    1. 원형 큐를 일반 큐로 바꿔보기
+    속도 체크
+    2. 리스트로 바꿔보기
+    속도 체크 및 원래 코드랑 비교
+
+
+
+
+
+
+*/
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif
-#include<iostream>
 #include <string>
-#include <string.h>
 #include <queue>
 #include <algorithm>
 #include <unordered_map>
@@ -17,12 +27,12 @@ using namespace std;
 struct File {
     short createdTime; // 생성 시각
     short editedTime;  // 수정 시각
-    char* name, * data; // 파일명, 파일내용
+    string name, data; // 파일명, 파일내용
 };
 
 struct Branch {
     bool isValid; // 브랜치의 유효여부 (부모로 merge되면 false)
-    char* name;   // 브랜치명
+    string name;   // 브랜치명
     short files_begin_pos, files_length; // 저장된 파일들을 원형 큐의 위치 정보
     File files[MAX_FILES_SIZE];          // 저장된 파일들을 담고 있는 원형 큐(배열)
 
@@ -30,21 +40,20 @@ struct Branch {
     queue<Branch*> childBranchs; // 자식 브랜치들을 담고 있는 큐
 
     // 원형 큐에서 맨 앞의 파일을 pop
-    File* pop_file_front() {
+    void pop_file_front() {
         File* file = &files[files_begin_pos];
         files_begin_pos = (files_begin_pos + 1) % MAX_FILES_SIZE;
         files_length -= 1;
-        return file;
     }
 
     // 원형 큐의 맨 뒤에 새로운 파일을 push
     // 만약, 원형 큐가 가득차(SIZE >= 50) push가 불가능 하다면, pop(가장 오래된 파일 제거) 후 push
-    File* push_file_back(File _file) {
+    void push_file_back(File _file) {
         if (files_length >= MAX_FILES_SIZE) pop_file_front();
         File* file = &files[(files_begin_pos + files_length) % MAX_FILES_SIZE];
         files_length += 1;
         *file = _file;
-        return file;
+
     }
 };
 
@@ -53,27 +62,19 @@ struct Branch {
 
 
 
-char char_pool[MAX_API_CALL * MAX_CHAR_SIZE * 2]; // 문자열 메모리 풀 배열
-int char_pool_last_idx;                           // 문자열 메모리 풀 마지막 할당 위치
-Branch branch_pool[MAX_API_CALL + 1];             // 브랜치 메모리 풀 배열
-short branch_pool_last_idx;                       // 브랜치 메모리 풀 마지막 할당 위치
+Branch branch_pool[MAX_API_CALL + 1];            
+short branch_cnt;                      
 
 unordered_map<string, Branch*> branchMap;                     // 브랜치 이름을 키로, 해당 브랜치의 주소를 값으로 가지는 해시맵
 
-// str을 새로운 메모리 풀 공간에 복사하고, 복사된 문자열의 주소를 반환
-char* create_str(const char* str) {
-    char* ptr = &char_pool[char_pool_last_idx += MAX_CHAR_SIZE];
-    strcpy(ptr, str);
-    return ptr;
-}
 
 // 브랜치 이름과 부모 브랜치 주소가 주어지면, 새로운 브랜치를 생성하고 그 브랜치의 주소를 반환
 Branch* create_branch(const char* branch_name, Branch* parentBranch) {
-    Branch* branch = &branch_pool[branch_pool_last_idx++];
+    Branch* branch = &branch_pool[branch_cnt++];
 
     // 새로운 브랜치의 각 변수들을 초기화
     branch->isValid = true;
-    branch->name = create_str(branch_name);
+    branch->name = branch_name;
     branch->files_length = 0;
     branch->parentBranch = parentBranch;
     while (!branch->childBranchs.empty()) branch->childBranchs.pop();
@@ -87,29 +88,28 @@ File* find_file(const char* branch_name, const char* file_name) {
     Branch* branch = branchMap[branch_name];
     for (short i = 0; i < branch->files_length; i++) {
         File* file = &branch->files[(branch->files_begin_pos + i) % MAX_FILES_SIZE];
-        if (strcmp(file->name, file_name) == 0) return file;
+        if (file->name == file_name) return file;
     }
-    return NULL;
+    return nullptr;
 }
 
 
 void init() {
     // 모든 전역 변수들을 초기화
     branchMap.clear();
-    branch_pool_last_idx = 0;
-    char_pool_last_idx = 0;
+    branch_cnt = 0;
 
     // `root` 브랜치 생성
-    create_branch("root", NULL);
+    create_branch("root", nullptr);
 }
 
 void create(int mTime, char branch_name[], char file_name[], char data[]) {
     // 브랜치에 저장된 파일을 관리하는 원형 큐에 새 파일을 추가
-    File* file = branchMap[branch_name]->push_file_back({
+    branchMap[branch_name]->push_file_back({
         (short)mTime,
         (short)mTime,
-        create_str(file_name),
-        create_str(data),
+        file_name,
+        data
         });
     
 }
@@ -117,7 +117,7 @@ void create(int mTime, char branch_name[], char file_name[], char data[]) {
 void edit(int mTime, char branch_name[], char file_name[], char data[]) {
     File* file = find_file(branch_name, file_name);
     file->editedTime = mTime;      // 파일의 최근 수정 시각 업데이트
-    file->data = create_str(data); // 파일의 내용 수정
+    file->data = data; // 파일의 내용 수정
     
 }
 
@@ -133,7 +133,7 @@ void branch(int mTime, char parent_branch_name[], char child_branch_name[]) {
     // 부모 브랜치의 모든 파일을 하나씩 자식 브랜치에 복사
     for (short i = 0; i < parent_branch->files_length; i++) {
         short pos = (parent_branch->files_begin_pos + i) % MAX_FILES_SIZE;
-        File* file = child_branch->push_file_back(parent_branch->files[pos]);
+        child_branch->push_file_back(parent_branch->files[pos]);
     }
     
 }
@@ -190,7 +190,7 @@ void merge(int mTime, char branch_name[]) {
 
 int readfile(int mTime, char branch_name[], char file_name[], char ret[]) {
     File* file = find_file(branch_name, file_name);
-    strcpy(ret, file->data);
+    strcpy(ret, file->data.c_str());
     
-    return strlen(file->data);
+    return file->data.size();
 }
