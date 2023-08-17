@@ -70,7 +70,7 @@ static bool run()
 			if (ans != len) {
 				isOkey = false;
 				printf("%s : %s : %s\nREAD ERROR i-th: %d\nMy ans: %d Ans: %d\n", mBranch, mFile, retString, q, len, ans);
-				return isOkey;
+//				return isOkey;
 				
 			}
 			else if (strcmp(retString, mData) != 0)
