@@ -1,0 +1,4 @@
+﻿  vector.cpp
+C:\Users\weeee\Workspace\SW_Expert_Academy\Basic_Problem\4_Tree\No12\Directory\Directory\vector.cpp(33,9): warning C4244: 'return': 'unsigned __int64'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\weeee\Workspace\SW_Expert_Academy\Basic_Problem\4_Tree\No12\Directory\Directory\vector.cpp(40,9): warning C4244: 'return': 'unsigned __int64'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Directory.vcxproj -> C:\Users\weeee\Workspace\SW_Expert_Academy\Basic_Problem\4_Tree\No12\Directory\x64\Debug\Directory.exe
